@@ -51,14 +51,22 @@ with col2:
 
 # Process button
 if uploaded_file and st.button("🚀 Run AI Analysis"):
-    with st.spinner("Processing image... This may take a few minutes."):
-        # In the real version, send to your Hugging Face backend
-        # response = requests.post(
-        #     "https://YOUR_USERNAME-vaayu-cadastral-ai.hf.space/predict",
-        #     files={"file": uploaded_file.getvalue()}
-        # )
+    with st.spinner("Processing..."):
+        # Send image to Hugging Face backend
+        files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
+        response = requests.post(
+            "https://Bhar1324-Kadastara.hf.space/predict",
+            files=files
+        )
         
-        st.success("Analysis complete!")
+        if response.status_code == 200:
+            result = response.json()
+            st.success("Analysis complete!")
+            
+            # Display results
+            st.json(result)
+        else:
+            st.error(f"Error: {response.status_code}")
         
         # Show summary
         st.subheader("📊 Detection Summary")
