@@ -3,6 +3,7 @@ import requests
 from PIL import Image
 import io
 import numpy as np
+import tifffile
 
 # Allow large drone images
 Image.MAX_IMAGE_PIXELS = None
