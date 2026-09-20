@@ -82,3 +82,35 @@ if uploaded_file and st.button("🚀 Run AI Analysis"):
             file_name="parcels.geojson",
             mime="application/json"
         )
+from folium.plugins import Draw
+from streamlit_folium import st_folium
+import json
+
+# Create the map
+m = folium.Map(location=[20.5937, 78.9629], zoom_start=15)
+
+# Add the drawing toolbar (polygon, rectangle, etc.)
+draw = Draw(
+    draw_options={
+        "polygon": True,
+        "rectangle": True,
+        "polyline": False,
+        "circle": False,
+        "marker": False,
+    },
+    edit_options={"edit": True, "remove": True},
+)
+draw.add_to(m)[reference:10]
+
+# Display the map and capture drawing output
+output = st_folium(m, width=800, height=500, key="editor")
+
+# When the user finishes a drawing, it appears in output["last_active_drawing"]
+if output and output.get("last_active_drawing"):
+    drawn_geometry = output["last_active_drawing"]["geometry"]
+    st.success("New parcel boundary captured!")
+    st.json(drawn_geometry)  # You can now save this to your database
+
+    # Convert the drawn GeoJSON to a Shapely polygon for validation
+    # from shapely.geometry import shape
+    # new_polygon = shape(drawn_geometry)
