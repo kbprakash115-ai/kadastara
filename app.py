@@ -25,8 +25,7 @@ def load_image(uploaded_file):
     except Exception:
         pass
 
-    # Fallback: tifffile handles GeoTIFFs
-    import tifffile
+    # Fallback: tifffile
     arr = tifffile.imread(io.BytesIO(data))
 
     # Handle different band layouts
